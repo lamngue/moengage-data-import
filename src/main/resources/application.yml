@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:redshift://redshift-cluster-1.c474pyvxrnp3.ap-southeast-1.redshift.amazonaws.com:5439/dev
+    username: connectiontest
+    password: Password123
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8000
+
