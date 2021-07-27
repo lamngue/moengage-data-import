@@ -7,12 +7,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+
+    show-sql: false
+    hbm2ddl:
+      auto: none
     properties:
       hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
-
+        dialect : com.cmc.moengagedataimport.customSqlDialect.CustomSqlDialect
+        current_session_context_class: thread
 server:
   port: 8000
 
