@@ -1,4 +1,8 @@
 spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:tBQU0x4KXzx5ZF9m@cluster0.erben.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      database: Reshift_Moengage
   datasource:
     url: jdbc:redshift://redshift-cluster-1.c474pyvxrnp3.ap-southeast-1.redshift.amazonaws.com:5439/dev
     username: connectiontest
