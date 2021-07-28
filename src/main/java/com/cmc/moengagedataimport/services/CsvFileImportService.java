@@ -3,7 +3,7 @@ package com.cmc.moengagedataimport.services;
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;

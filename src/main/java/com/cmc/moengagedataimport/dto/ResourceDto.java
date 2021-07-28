@@ -1,4 +1,4 @@
-package dto;
+package com.cmc.moengagedataimport.dto;
 
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import lombok.Data;
@@ -13,3 +13,4 @@ import java.util.Map;
 public class ResourceDto implements Serializable {
     Map<String, List<SbfLoanPortfolio>> dataImport;
 }
+

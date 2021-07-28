@@ -3,7 +3,7 @@ package com.cmc.moengagedataimport.services;
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;

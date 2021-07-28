@@ -5,7 +5,7 @@ import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.repository.SbfLoanPortfolioRepository;
 import com.google.gson.Gson;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
