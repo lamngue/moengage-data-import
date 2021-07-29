@@ -13,3 +13,4 @@ import java.util.Map;
 public class ResourceDto implements Serializable {
     Map<String, List<SbfLoanPortfolio>> dataImport;
 }
+

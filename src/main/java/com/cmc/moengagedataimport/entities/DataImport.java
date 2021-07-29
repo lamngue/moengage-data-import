@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-@ConfigurationProperties(prefix = "spring.data.mongodb.uri")
 @Document(collection = "data_import")
 public class DataImport {
     @Id
