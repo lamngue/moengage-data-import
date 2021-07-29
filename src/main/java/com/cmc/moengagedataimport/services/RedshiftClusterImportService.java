@@ -2,40 +2,45 @@ package com.cmc.moengagedataimport.services;
 
 import com.cmc.moengagedataimport.entities.DataImport;
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
+import com.cmc.moengagedataimport.enums.ImportTypeEnum;
 import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.repository.SbfLoanPortfolioRepository;
-import com.google.gson.Gson;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
+import java.util.*;
 
 @Service
 public class RedshiftClusterImportService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-    @Autowired
+
     private SbfLoanPortfolioRepository sbfLoanPortfolioRepository;
 
-    @Autowired
     private DataImportRepository dataImportRepository;
 
-    public ResourceDto getResources(Object object) {
+    private DataImportService dataImportService;
+
+
+    public RedshiftClusterImportService(SbfLoanPortfolioRepository sbfLoanPortfolioRepository, DataImportRepository dataImportRepository, DataImportService dataImportService) {
+        this.sbfLoanPortfolioRepository = sbfLoanPortfolioRepository;
+        this.dataImportRepository = dataImportRepository;
+        this.dataImportService = dataImportService;
+    }
+
+    public ResourceDto getResources() {
         ResourceDto resourceDTO = new ResourceDto();
         Map<String, List<SbfLoanPortfolio>> tablesFetching = new HashMap<>();
-        List<SbfLoanPortfolio> sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAll();
-        Gson gson = new Gson();
-        List<DataImport> dataImports = sbfLoanPortfolioList.stream().map(x -> {
-            DataImport dataImport = new DataImport();
-            dataImport.setRecord(gson.toJson(x));
-            return dataImport;
-        }).collect(Collectors.toList());
-        dataImportRepository.saveAll(dataImports);
+        Optional<DataImport> latestDataImport = dataImportRepository.findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum.REDSHIFT);
+        List<SbfLoanPortfolio> sbfLoanPortfolioList;
+        if(latestDataImport.isPresent()){
+            sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAllByData_dateIsGreaterThan(latestDataImport.get().getDataDate());
+        }
+        else {
+            sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAll();
+        }
+        dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
         tablesFetching.put(SbfLoanPortfolio.class.getSimpleName(), sbfLoanPortfolioList);
         resourceDTO.setDataImport(tablesFetching);
         return resourceDTO;

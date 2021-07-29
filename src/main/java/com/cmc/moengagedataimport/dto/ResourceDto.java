@@ -1,4 +1,4 @@
-package dto;
+package com.cmc.moengagedataimport.dto;
 
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import lombok.Data;

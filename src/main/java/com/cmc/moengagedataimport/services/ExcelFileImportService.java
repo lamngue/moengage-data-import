@@ -1,15 +1,19 @@
 package com.cmc.moengagedataimport.services;
 
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
+import com.cmc.moengagedataimport.enums.ImportTypeEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +26,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExcelFileImportService {
+    @Autowired
+    private DataImportService dataImportService;
+
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private List<String> getSheetNames(XSSFWorkbook workbook) {
         List<String> sheetNames = new ArrayList<>();
         for (int i=0; i<workbook.getNumberOfSheets(); i++) {
@@ -48,6 +56,7 @@ public class ExcelFileImportService {
                     return  sbfLoanPortfolio;
                 }).collect(Collectors.toList());
                 sheetsInFile.put(sheetName, sbfLoanPortfolioList);
+                dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
             }
         }
         resourceDTO.setDataImport(sheetsInFile);

@@ -51,7 +51,7 @@ public class SbfLoanPortfolio {
     private String loan_no;
     private Double int_expected;
     private String acquisition_channel_code;
-    private Integer data_date;
+    private Long data_date;
     private Double overdue_interest;
     private Double interest_income;
     private Integer cust_industry_type;

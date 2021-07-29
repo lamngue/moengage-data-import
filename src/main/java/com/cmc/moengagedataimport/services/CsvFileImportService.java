@@ -1,15 +1,17 @@
 package com.cmc.moengagedataimport.services;
 
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
+import com.cmc.moengagedataimport.enums.ImportTypeEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.ResourceDto;
+import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +28,10 @@ import java.util.stream.Collectors;
 @Service
 public class CsvFileImportService  {
     Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private DataImportService dataImportService;
+
     public ResourceDto setResourceDTO(CSVParser csvParser, String fileName) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ResourceDto resourceDTO = new ResourceDto();
@@ -34,13 +40,13 @@ public class CsvFileImportService  {
         List<SbfLoanPortfolio> sbfLoanPortfolioList = records.stream().map(x -> {
             SbfLoanPortfolio sbfLoanPortfolio = null;
             try {
-                log.info(x.toString());
                 sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
             return sbfLoanPortfolio;
         }).collect(Collectors.toList());
+        dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
         resource.put(fileName, sbfLoanPortfolioList);
         resourceDTO.setDataImport(resource);
         return resourceDTO;
