@@ -21,14 +21,14 @@ import java.util.Map;
 @Service
 public class BulkImportService extends ApiService {
 
-    @Value("${bulk.api.url}")
-    private String url;
-
-    @Value("${app.id}")
-    private String userName;
-
-    @Value("${secret.key}")
-    private String password;
+//    @Value("${bulk.api.url}")
+//    private String url;
+//
+//    @Value("${app.id}")
+//    private String userName;
+//
+//    @Value("${secret.key}")
+//    private String password;
 
 //    private List<JSONObject> populateBulkAttributes(ResourceDTO resourceDTO) {
 //        Map<String, List<JSONObject>> dataImport = resourceDTO.getDataImport();
