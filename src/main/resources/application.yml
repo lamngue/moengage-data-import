@@ -19,6 +19,14 @@ spring:
       hibernate:
         dialect : com.cmc.moengagedataimport.customSqlDialect.CustomSqlDialect
         current_session_context_class: thread
+bulk:
+  api:
+    url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=1NZ9MZFA546B7ZLQALH1K1EE
+secret:
+  key: ${env.MOENGAGE_DATAAPI_KEY}
+  dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
+app:
+  id: ${env.MOENGAGE_DATAAPI_ID}
 server:
   port: 8000
 

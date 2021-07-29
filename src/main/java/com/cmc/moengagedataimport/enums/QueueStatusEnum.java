@@ -2,5 +2,7 @@ package com.cmc.moengagedataimport.enums;
 
 public enum QueueStatusEnum {
     Sent,
-    Waiting
+    Waiting,
+    Failed,
+    Success,
 }

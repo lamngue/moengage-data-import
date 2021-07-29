@@ -18,10 +18,10 @@ public class DataImport {
     @Column(nullable = false)
     private Integer id;
     @Column(nullable = false)
-    private String record;
+    private SbfLoanPortfolio record;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private QueueStatusEnum statusEnum = QueueStatusEnum.Waiting;
+    private QueueStatusEnum status = QueueStatusEnum.Waiting;
     private Long dataDate;
     private Long sendDate;
     @Enumerated(EnumType.STRING)

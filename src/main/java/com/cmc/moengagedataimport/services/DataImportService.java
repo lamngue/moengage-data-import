@@ -21,7 +21,7 @@ public class DataImportService {
         Gson gson = new Gson();
         List<DataImport> dataImports = sbfLoanPortfolioList.stream().map(x -> {
             DataImport dataImport = new DataImport();
-            dataImport.setRecord(gson.toJson(x));
+            dataImport.setRecord(x);
             dataImport.setId(x.getCustomer_id_number());
             dataImport.setDataDate(x.getData_date());
             dataImport.setSendDate(0L);
