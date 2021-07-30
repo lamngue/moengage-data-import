@@ -14,7 +14,7 @@
 	<name>moengagedataimport</name>
 	<description>Data Import Project for Moengage</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 	<repositories>
 		<repository>

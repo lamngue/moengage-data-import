@@ -32,7 +32,7 @@ public class MoengageImportSchedule {
     @Autowired
     private BulkImportService bulkImportService;
 
-    @Scheduled(cron = "0 34 16 * * *")
+    @Scheduled(cron = "0 0/5 * * * *")
     public void dailyMoengageImport () throws JsonProcessingException {
         log.info("hello");
         List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIsOrStatusIs(QueueStatusEnum.Waiting, QueueStatusEnum.Failed);

@@ -32,7 +32,7 @@ public class RedshiftClusterImportService {
     public ResourceDto getResources() {
         ResourceDto resourceDTO = new ResourceDto();
         Map<String, List<SbfLoanPortfolio>> tablesFetching = new HashMap<>();
-        Optional<DataImport> latestDataImport = dataImportRepository.findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum.REDSHIFT);
+        Optional<DataImport> latestDataImport = dataImportRepository.findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum.FIlE);
         List<SbfLoanPortfolio> sbfLoanPortfolioList;
         if(latestDataImport.isPresent()){
             sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAllByData_dateIsGreaterThan(latestDataImport.get().getDataDate());

@@ -26,7 +26,7 @@ secret:
   key: ${env.MOENGAGE_DATAAPI_KEY}
   dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
 app:
-  id: ${env.MOENGAGE_DATAAPI_ID}
+  id: MQMA78IFOZEEUR8GK9X31RHR_DEBUG
 server:
   port: 8000
 
