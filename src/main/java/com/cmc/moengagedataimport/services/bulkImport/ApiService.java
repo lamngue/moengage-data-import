@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import com.cmc.moengagedataimport.utils.DateUtils;
 
 @Service
 public class ApiService {
@@ -28,7 +29,13 @@ public class ApiService {
                 .filter(entry -> dataFields.containsKey(entry.getKey().toLowerCase()))
                 .forEach(entry -> {
                     String key = entry.getKey();
-                    dataObject.put(dataFields.get(key.toLowerCase()).toLowerCase(), dataObject.get(key));
+                    String age;
+                    if (key.equals("cust_birth_date")) {
+                        age = DateUtils.getAgeFromBirthday("yyyymmdd",dataObject.getString(key));
+                        dataObject.put(dataFields.get(key.toLowerCase()).toLowerCase(), age);
+                    } else {
+                        dataObject.put(dataFields.get(key.toLowerCase()).toLowerCase(), dataObject.get(key));
+                    }
                     dataObject.remove(key);
                 });
         return dataObject;
