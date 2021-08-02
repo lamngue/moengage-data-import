@@ -8,6 +8,7 @@ import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,10 @@ public class MoengageImportSchedule {
     @Autowired
     private BulkImportService bulkImportService;
 
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/1 * * * *")
     public void dailyMoengageImport () throws JsonProcessingException {
-        log.info("hello");
         List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIsOrStatusIs(QueueStatusEnum.Waiting, QueueStatusEnum.Failed);
-        ResourceDto resourceDto = new ResourceDto();
-        Map<String, List<SbfLoanPortfolio>> resource = new HashMap<>();
-        List<SbfLoanPortfolio> sbfLoanPortfolioList = dataImports.stream().map(x -> x.getRecord()).collect(Collectors.toList());
-        resource.put("mongo", sbfLoanPortfolioList);
-        resourceDto.setDataImport(resource);
-        HttpStatus httpStatus =bulkImportService.bulkImport(resourceDto);
+        HttpStatus httpStatus = bulkImportService.bulkImport(dataImports);
         QueueStatusEnum queueStatus;
         if(httpStatus.equals(HttpStatus.OK)){
             queueStatus= QueueStatusEnum.Success;

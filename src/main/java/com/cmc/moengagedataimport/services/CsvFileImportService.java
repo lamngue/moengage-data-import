@@ -48,7 +48,7 @@ public class CsvFileImportService  {
         }).collect(Collectors.toList());
         dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
         resource.put(fileName, sbfLoanPortfolioList);
-        resourceDTO.setDataImport(resource);
+//        resourceDTO.setDataImport(resource);
         return resourceDTO;
     }
 

@@ -59,7 +59,7 @@ public class ExcelFileImportService {
                 dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
             }
         }
-        resourceDTO.setDataImport(sheetsInFile);
+//        resourceDTO.setDataImport(sheetsInFile);
         return resourceDTO;
     }
 

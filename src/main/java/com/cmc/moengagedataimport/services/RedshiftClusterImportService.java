@@ -6,11 +6,13 @@ import com.cmc.moengagedataimport.enums.ImportTypeEnum;
 import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.repository.SbfLoanPortfolioRepository;
 import com.cmc.moengagedataimport.dto.ResourceDto;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RedshiftClusterImportService {
@@ -31,7 +33,7 @@ public class RedshiftClusterImportService {
 
     public ResourceDto getResources() {
         ResourceDto resourceDTO = new ResourceDto();
-        Map<String, List<SbfLoanPortfolio>> tablesFetching = new HashMap<>();
+        Map<String, List<JSONObject>> tablesFetching = new HashMap<>();
         Optional<DataImport> latestDataImport = dataImportRepository.findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum.FIlE);
         List<SbfLoanPortfolio> sbfLoanPortfolioList;
         if(latestDataImport.isPresent()){
@@ -41,7 +43,9 @@ public class RedshiftClusterImportService {
             sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAll();
         }
         dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
-        tablesFetching.put(SbfLoanPortfolio.class.getSimpleName(), sbfLoanPortfolioList);
+        List<JSONObject> jsonObjects =  sbfLoanPortfolioList.stream().map(x -> new JSONObject(x)).collect(Collectors.toList());
+
+        tablesFetching.put(SbfLoanPortfolio.class.getSimpleName(), jsonObjects);
         resourceDTO.setDataImport(tablesFetching);
         return resourceDTO;
     }

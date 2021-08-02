@@ -4,6 +4,7 @@ import com.cmc.moengagedataimport.dto.ResourceDto;
 import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,7 +27,7 @@ public class MoengageFactoryService {
     @Autowired
     private RedshiftClusterImportService redshiftClusterImportService;
 
-    public Map<String, List<SbfLoanPortfolio>> GetTypeInput(MultipartFile file) throws JsonProcessingException {
+    public Map<String, List<JSONObject>> GetTypeInput(MultipartFile file) throws JsonProcessingException {
       if(file == null) {
          ResourceDto resourceDto = redshiftClusterImportService.getResources();
          return resourceDto.getDataImport();
