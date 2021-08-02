@@ -42,7 +42,7 @@ public class RedshiftClusterImportService {
         else {
             sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAll();
         }
-        dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
+        dataImportService.importRedshiftData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
         List<JSONObject> jsonObjects =  sbfLoanPortfolioList.stream().map(x -> new JSONObject(x)).collect(Collectors.toList());
 
         tablesFetching.put(SbfLoanPortfolio.class.getSimpleName(), jsonObjects);

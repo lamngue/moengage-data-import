@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 @Service
 public class CsvFileImportService  {
     Logger log = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private DataImportService dataImportService;
 
@@ -37,17 +36,17 @@ public class CsvFileImportService  {
         ResourceDto resourceDTO = new ResourceDto();
         List<JSONObject> records = readValueToJsonObject(csvParser);
         Map<String, List<SbfLoanPortfolio>> resource = new HashMap<>();
-        List<SbfLoanPortfolio> sbfLoanPortfolioList = records.stream().map(x -> {
-            SbfLoanPortfolio sbfLoanPortfolio = null;
-            try {
-                sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-            return sbfLoanPortfolio;
-        }).collect(Collectors.toList());
-        dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
-        resource.put(fileName, sbfLoanPortfolioList);
+//        List<SbfLoanPortfolio> sbfLoanPortfolioList = records.stream().map(x -> {
+//            SbfLoanPortfolio sbfLoanPortfolio = null;
+//            try {
+//                sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//            return sbfLoanPortfolio;
+//        }).collect(Collectors.toList());
+        dataImportService.importFileData(records);
+//        resource.put(fileName, sbfLoanPortfolioList);
 //        resourceDTO.setDataImport(resource);
         return resourceDTO;
     }

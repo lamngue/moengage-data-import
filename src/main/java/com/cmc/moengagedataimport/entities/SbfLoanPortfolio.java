@@ -29,7 +29,7 @@ public class SbfLoanPortfolio {
     private Double credit_amt_granted;
     private Double shared_undrawn_limit;
     @Id
-    private Integer customer_id_number;
+    private Long customer_id_number;
     private Double billed_int;
     private Double aggregated_disbursed_amt;
     private String risk_grade;

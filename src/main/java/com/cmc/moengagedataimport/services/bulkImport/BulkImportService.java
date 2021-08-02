@@ -1,12 +1,13 @@
 package com.cmc.moengagedataimport.services.bulkImport;
 
-import com.cmc.moengagedataimport.dto.ResourceDto;
 import com.cmc.moengagedataimport.entities.DataImport;
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 public class BulkImportService {
 
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     @Value("${bulk.api.url}")
     private String url;
 
@@ -34,15 +36,15 @@ public class BulkImportService {
     private List<JSONObject> populateBulkAttributes(List<DataImport> dataImports) {
         List<JSONObject> bulkAttributeList = new ArrayList<>();
         for (DataImport data : dataImports) {
-        JSONObject customAttribute = data.getRecord();
+        JSONObject customAttribute = new JSONObject(data.getRecord());
         JSONObject bulkAttribute = new JSONObject();
-        bulkAttribute.put("name", data.getName());
-        bulkAttribute.put("first_name", data.getFirstName());
-        bulkAttribute.put("lastName", data.getLastName());
-        bulkAttribute.put("email", data.getEmail());
-        bulkAttribute.put("mobile", data.getMobile());
-        bulkAttribute.put("gender", data.getGender());
-        bulkAttribute.put("age", data.getAge());
+        customAttribute.put("name", data.getName());
+        customAttribute.put("first_name", data.getFirstName());
+        customAttribute.put("lastName", data.getLastName());
+        customAttribute.put("email", data.getEmail());
+        customAttribute.put("mobile", data.getMobile());
+        customAttribute.put("gender", data.getGender());
+        customAttribute.put("age", data.getAge());
         bulkAttribute.put("type", "customer");
         bulkAttribute.put("customer_id", data.getId());
         bulkAttribute.put("attributes", customAttribute);
@@ -71,6 +73,7 @@ public class BulkImportService {
         HttpStatus status = HttpStatus.OK;
         try {
             String response = restTemplate.postForObject(this.url, entity, String.class);
+            log.info("response" +response);
         } catch (HttpClientErrorException e) {
             System.out.println(e.getStackTrace());
             status = e.getStatusCode();

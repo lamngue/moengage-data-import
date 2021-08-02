@@ -17,9 +17,9 @@ import java.util.UUID;
 public class DataImport {
     @Id
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
     @Column(nullable = false)
-    private JSONObject record;
+    private String record;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private QueueStatusEnum status = QueueStatusEnum.Waiting;
@@ -32,7 +32,7 @@ public class DataImport {
     private String firstName;
     private String lastName;
     private String email;
-    private Integer mobile;
+    private String mobile;
     private String gender;
     private String age;
 }
