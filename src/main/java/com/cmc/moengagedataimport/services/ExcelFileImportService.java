@@ -40,26 +40,26 @@ public class ExcelFileImportService {
 
     public ResourceDto setResourceDTO(XSSFWorkbook workbook, List<String> sheetNames) {
         ResourceDto resourceDTO = new ResourceDto();
-        Map<String, List<SbfLoanPortfolio>> sheetsInFile = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
-        for (String sheetName : sheetNames) {
-            if (sheetName.equals("Sheet 1")) {
+        Map<String, List<JSONObject>> sheetsInFile = new HashMap<>();
+//        ObjectMapper mapper = new ObjectMapper();
+          for (String sheetName : sheetNames) {
+            if (sheetName.equals("Sheet 1") || sheetName.equals("SBF Campaign Management Moengag")) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
-                List<SbfLoanPortfolio> sbfLoanPortfolioList = listJsonObject.stream().map(x -> {
-                    SbfLoanPortfolio sbfLoanPortfolio = null;
-                    try {
-                        sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class );
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    return  sbfLoanPortfolio;
-                }).collect(Collectors.toList());
-                sheetsInFile.put(sheetName, sbfLoanPortfolioList);
-//                dataImportService.importData(sbfLoanPortfolioList, ImportTypeEnum.FIlE);
-            }
-        }
-//        resourceDTO.setDataImport(sheetsInFile);
+                dataImportService.importFileData(listJsonObject, sheetName);
+                break;
+//                List<SbfLoanPortfolio> sbfLoanPortfolioList = listJsonObject.stream().map(x -> {
+//                    SbfLoanPortfolio sbfLoanPortfolio = null;
+//                    try {
+//                        sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class );
+//                    } catch (JsonProcessingException e) {
+//                        e.printStackTrace();
+//                    }
+//                    return  sbfLoanPortfolio;
+                }
+          }
+
+          //        resourceDTO.setDataImport(sheetsInFile);
         return resourceDTO;
     }
 
