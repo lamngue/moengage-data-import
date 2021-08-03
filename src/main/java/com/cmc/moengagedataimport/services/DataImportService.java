@@ -57,8 +57,11 @@ public class DataImportService {
         if(fileName.toLowerCase().contains("cif")){
             fieldNameList = cifFieldName;
         }
-        if(fileName.toLowerCase().contains("campaign")){
+        else if(fileName.toLowerCase().contains("campaign") || fileName.toLowerCase().contains("sheet 1")){
             fieldNameList = loanPortfolioFieldName;
+        }
+        else {
+            return;
         }
         log.info(fieldNameList.get(1));
         List<DataImport> dataImports = new ArrayList<>();

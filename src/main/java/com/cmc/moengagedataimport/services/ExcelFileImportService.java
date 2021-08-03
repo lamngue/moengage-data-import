@@ -74,11 +74,10 @@ public class ExcelFileImportService {
             boolean skippedRow = false;
             int cells = dataRow.getPhysicalNumberOfCells();
             // Cell
+            if(cells == 0){
+                break;
+            }
             for (int j = 0; j < cells; j++) {
-                if (headerRow.getCell(j).getStringCellValue().equals("Data Date") ) {
-                    skippedRow = true;
-                    break;
-                }
                 // Numeric cell
                 if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_NUMERIC) {
                     objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
@@ -108,9 +107,6 @@ public class ExcelFileImportService {
                         objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), cellDataValue);
                     }
                 }
-            }
-            if (skippedRow) {
-                continue;
             }
             listJSONObject.add(objectJsonUser);
         }
