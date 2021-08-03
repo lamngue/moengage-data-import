@@ -7,7 +7,10 @@ import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.utils.DateUtils;
 import com.google.gson.Gson;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,9 +19,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class DataImportService {
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private DataImportRepository dataImportRepository;
+
+    @Value("${file.fieldName.loan_portfolio}")
+    private List<String> loanPortfolioFieldName;
+
+    @Value("${file.fieldName.sbf_cif}")
+    private List<String> cifFieldName;
 
     public void importRedshiftData(List<SbfLoanPortfolio> sbfLoanPortfolioList, ImportTypeEnum type){
         Gson gson = new Gson();
@@ -42,21 +52,28 @@ public class DataImportService {
         dataImportRepository.saveAll(dataImports);
     }
 
-    public void importFileData(List<JSONObject> fileDataList){
-        Gson gson = new Gson();
+    public void importFileData(List<JSONObject> fileDataList, String fileName){
+        List<String> fieldNameList = new ArrayList<>();
+        if(fileName.toLowerCase().contains("cif")){
+            fieldNameList = cifFieldName;
+        }
+        if(fileName.toLowerCase().contains("campaign")){
+            fieldNameList = loanPortfolioFieldName;
+        }
+        log.info(fieldNameList.get(1));
         List<DataImport> dataImports = new ArrayList<>();
         for (JSONObject fileData : fileDataList) {
             DataImport dataImport = new DataImport();
             dataImport.setRecord(fileData.toString());
-            dataImport.setId(Long.parseLong(fileData.get("CUST_ID1").toString()));
+            dataImport.setId(Long.parseLong(fileData.get(fieldNameList.get(0)).toString()));
 //            dataImport.setEmail(x.());
-            dataImport.setName(fileData.getString("FIRST_NAME") + fileData.getString("MIDDLE_NAME") + fileData.getString("SURNAME") );
-            dataImport.setFirstName(fileData.getString("FIRST_NAME"));
-            dataImport.setLastName(fileData.getString("SURNAME"));
-            dataImport.setGender(fileData.getString("GENDER_CD"));
-            dataImport.setMobile(fileData.getString("PH_NBR1"));
-            dataImport.setDataDate(fileData.getLong("DATA_DATE"));
-            String age = DateUtils.getAgeFromBirthday("yyyymmdd", fileData.getString("DOB"));
+            dataImport.setName(fileData.getString(fieldNameList.get(1)) + fileData.getString(fieldNameList.get(2)) + fileData.getString(fieldNameList.get(3)) );
+            dataImport.setFirstName(fileData.getString(fieldNameList.get(1)));
+            dataImport.setLastName(fileData.getString(fieldNameList.get(3)));
+            dataImport.setGender(fileData.getString(fieldNameList.get(4)));
+            dataImport.setMobile(fileData.getString(fieldNameList.get(5)));
+            dataImport.setDataDate(fileData.getLong(fieldNameList.get(6)));
+            String age = DateUtils.getAgeFromBirthday("yyyymmdd", fileData.getString(fieldNameList.get(7)));
             dataImport.setAge(age);
             dataImport.setSendDate(0L);
             dataImport.setType(ImportTypeEnum.FIlE);

@@ -29,4 +29,10 @@ app:
   id: MQMA78IFOZEEUR8GK9X31RHR_DEBUG
 server:
   port: 8000
-
+file:
+  fieldName:
+    sbf_cif: CUST_ID1,FIRST_NAME,MIDDLE_NAME,SURNAME,GENDER_CD,PH_NBR1,DATA_DATE,DOB
+    loan_portfolio: customer_id_number,cust_first_name,cust_middle_name,cust_last_name,cust_gender,cust_mob_no,data_date,cust_birth_date
+  fileName:
+    sbf_cif: cif
+    loan_portfolio: campaign

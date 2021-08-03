@@ -32,10 +32,10 @@ public class CsvFileImportService  {
     private DataImportService dataImportService;
 
     public ResourceDto setResourceDTO(CSVParser csvParser, String fileName) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
+//        ObjectMapper mapper = new ObjectMapper();
         ResourceDto resourceDTO = new ResourceDto();
         List<JSONObject> records = readValueToJsonObject(csvParser);
-        Map<String, List<SbfLoanPortfolio>> resource = new HashMap<>();
+//        Map<String, List<SbfLoanPortfolio>> resource = new HashMap<>();
 //        List<SbfLoanPortfolio> sbfLoanPortfolioList = records.stream().map(x -> {
 //            SbfLoanPortfolio sbfLoanPortfolio = null;
 //            try {
@@ -45,7 +45,7 @@ public class CsvFileImportService  {
 //            }
 //            return sbfLoanPortfolio;
 //        }).collect(Collectors.toList());
-        dataImportService.importFileData(records);
+        dataImportService.importFileData(records, fileName);
 //        resource.put(fileName, sbfLoanPortfolioList);
 //        resourceDTO.setDataImport(resource);
         return resourceDTO;
