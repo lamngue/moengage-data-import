@@ -30,7 +30,7 @@ public class DataImportService {
     @Value("${file.fieldName.sbf_cif}")
     private List<String> cifFieldName;
 
-    public void importRedshiftData(List<SbfLoanPortfolio> sbfLoanPortfolioList, ImportTypeEnum type){
+    public List<DataImport> importRedshiftData(List<SbfLoanPortfolio> sbfLoanPortfolioList, ImportTypeEnum type){
         Gson gson = new Gson();
         List<DataImport> dataImports = sbfLoanPortfolioList.stream().map(x -> {
             DataImport dataImport = new DataImport();
@@ -50,9 +50,10 @@ public class DataImportService {
             return dataImport;
         }).collect(Collectors.toList());
         dataImportRepository.saveAll(dataImports);
+        return dataImports;
     }
 
-    public void importFileData(List<JSONObject> fileDataList, String fileName){
+    public List<DataImport> importFileData(List<JSONObject> fileDataList, String fileName){
         List<String> fieldNameList = new ArrayList<>();
         if(fileName.toLowerCase().contains("cif")){
             fieldNameList = cifFieldName;
@@ -61,7 +62,7 @@ public class DataImportService {
             fieldNameList = loanPortfolioFieldName;
         }
         else {
-            return;
+            return null;
         }
         log.info(fieldNameList.get(1));
         List<DataImport> dataImports = new ArrayList<>();
@@ -83,5 +84,6 @@ public class DataImportService {
             dataImports.add(dataImport);
         }
         dataImportRepository.saveAll(dataImports);
+        return dataImports;
     }
 }

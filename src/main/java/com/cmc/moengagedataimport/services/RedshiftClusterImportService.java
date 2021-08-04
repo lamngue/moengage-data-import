@@ -5,7 +5,6 @@ import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.cmc.moengagedataimport.enums.ImportTypeEnum;
 import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.repository.SbfLoanPortfolioRepository;
-import com.cmc.moengagedataimport.dto.ResourceDto;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +30,7 @@ public class RedshiftClusterImportService {
         this.dataImportService = dataImportService;
     }
 
-    public ResourceDto getResources() {
-        ResourceDto resourceDTO = new ResourceDto();
+    public List<DataImport> getResources() {
         Map<String, List<JSONObject>> tablesFetching = new HashMap<>();
         Optional<DataImport> latestDataImport = dataImportRepository.findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum.FIlE);
         List<SbfLoanPortfolio> sbfLoanPortfolioList;
@@ -42,11 +40,10 @@ public class RedshiftClusterImportService {
         else {
             sbfLoanPortfolioList = sbfLoanPortfolioRepository.findAll();
         }
-        dataImportService.importRedshiftData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
+        List<DataImport> dataImports = dataImportService.importRedshiftData(sbfLoanPortfolioList, ImportTypeEnum.REDSHIFT);
         List<JSONObject> jsonObjects =  sbfLoanPortfolioList.stream().map(x -> new JSONObject(x)).collect(Collectors.toList());
 
         tablesFetching.put(SbfLoanPortfolio.class.getSimpleName(), jsonObjects);
-        resourceDTO.setDataImport(tablesFetching);
-        return resourceDTO;
+        return dataImports;
     }
 }

@@ -1,10 +1,6 @@
 package com.cmc.moengagedataimport.services;
 
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
-import com.cmc.moengagedataimport.enums.ImportTypeEnum;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cmc.moengagedataimport.dto.ResourceDto;
+import com.cmc.moengagedataimport.entities.DataImport;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -22,7 +18,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ExcelFileImportService {
@@ -38,29 +33,17 @@ public class ExcelFileImportService {
         return sheetNames;
     }
 
-    public ResourceDto setResourceDTO(XSSFWorkbook workbook, List<String> sheetNames) {
-        ResourceDto resourceDTO = new ResourceDto();
-        Map<String, List<JSONObject>> sheetsInFile = new HashMap<>();
-//        ObjectMapper mapper = new ObjectMapper();
+    public List<DataImport> setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
+        List<DataImport> dataImports = new ArrayList<>();
           for (String sheetName : sheetNames) {
             if (sheetName.equals("Sheet 1") || sheetName.equals("SBF Campaign Management Moengag")) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
-                dataImportService.importFileData(listJsonObject, sheetName);
+                dataImports = dataImportService.importFileData(listJsonObject, sheetName);
                 break;
-//                List<SbfLoanPortfolio> sbfLoanPortfolioList = listJsonObject.stream().map(x -> {
-//                    SbfLoanPortfolio sbfLoanPortfolio = null;
-//                    try {
-//                        sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class );
-//                    } catch (JsonProcessingException e) {
-//                        e.printStackTrace();
-//                    }
-//                    return  sbfLoanPortfolio;
                 }
           }
-
-          //        resourceDTO.setDataImport(sheetsInFile);
-        return resourceDTO;
+          return dataImports;
     }
 
     private List<JSONObject> readValueToJsonObject(XSSFSheet worksheet) {
@@ -113,7 +96,7 @@ public class ExcelFileImportService {
         return listJSONObject;
     }
 
-    public ResourceDto getResources(Object object) {
+    public List<DataImport> getResources(Object object) {
         MultipartFile excelFile = (MultipartFile) object;
         XSSFWorkbook workbook = null;
         try {
@@ -122,7 +105,7 @@ public class ExcelFileImportService {
             e.printStackTrace();
         }
         List<String> sheetNames = getSheetNames(workbook);
-        ResourceDto resourceDTO = setResourceDTO(workbook, sheetNames);
-        return resourceDTO;
+        List<DataImport> dataImports = setDataImport(workbook, sheetNames);
+        return dataImports;
     }
 }

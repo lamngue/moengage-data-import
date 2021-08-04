@@ -1,6 +1,5 @@
 package com.cmc.moengagedataimport.rabbitMQ.consumer;
 
-import com.cmc.moengagedataimport.dto.ResourceDto;
 import com.cmc.moengagedataimport.rabbitMQ.config.MessagingConfig;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 

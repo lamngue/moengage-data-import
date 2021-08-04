@@ -21,12 +21,12 @@ spring:
         current_session_context_class: thread
 bulk:
   api:
-    url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=MQMA78IFOZEEUR8GK9X31RHR_DEBUG
+    url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=1NZ9MZFA546B7ZLQALH1K1EE
 secret:
-  key: ${env.MOENGAGE_DATAAPI_KEY}
+  key: LeQy09vezCNCuKOBIYPXu3uu
   dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
 app:
-  id: MQMA78IFOZEEUR8GK9X31RHR_DEBUG
+  id: 1NZ9MZFA546B7ZLQALH1K1EE
 server:
   port: 8000
 file:

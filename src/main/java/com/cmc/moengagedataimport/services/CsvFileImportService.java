@@ -1,10 +1,6 @@
 package com.cmc.moengagedataimport.services;
 
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
-import com.cmc.moengagedataimport.enums.ImportTypeEnum;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.cmc.moengagedataimport.dto.ResourceDto;
+import com.cmc.moengagedataimport.entities.DataImport;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
@@ -19,10 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -31,24 +24,10 @@ public class CsvFileImportService  {
     @Autowired
     private DataImportService dataImportService;
 
-    public ResourceDto setResourceDTO(CSVParser csvParser, String fileName) throws IOException {
-//        ObjectMapper mapper = new ObjectMapper();
-        ResourceDto resourceDTO = new ResourceDto();
+    public List<DataImport> setDataImport(CSVParser csvParser, String fileName) throws IOException {
         List<JSONObject> records = readValueToJsonObject(csvParser);
-//        Map<String, List<SbfLoanPortfolio>> resource = new HashMap<>();
-//        List<SbfLoanPortfolio> sbfLoanPortfolioList = records.stream().map(x -> {
-//            SbfLoanPortfolio sbfLoanPortfolio = null;
-//            try {
-//                sbfLoanPortfolio = mapper.readValue(x.toString(), SbfLoanPortfolio.class);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//            return sbfLoanPortfolio;
-//        }).collect(Collectors.toList());
-        dataImportService.importFileData(records, fileName);
-//        resource.put(fileName, sbfLoanPortfolioList);
-//        resourceDTO.setDataImport(resource);
-        return resourceDTO;
+        List<DataImport> dataImports = dataImportService.importFileData(records, fileName);
+        return dataImports;
     }
 
     private List<JSONObject> readValueToJsonObject(CSVParser csvParser) throws IOException {
@@ -70,20 +49,19 @@ public class CsvFileImportService  {
         return csvData;
     }
 
-    public ResourceDto getResources(Object data) {
+    public List<DataImport> getResources(Object data) {
         MultipartFile csvFile = (MultipartFile) data;
         String fileName = csvFile.getOriginalFilename();
         CSVParser csvParser;
-        ResourceDto resourceDto = null;
+        List<DataImport> dataImports = null;
         try {
             BufferedReader fileReader = new BufferedReader(new
                     InputStreamReader(csvFile.getInputStream(), "UTF-8"));
             csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT);
-            resourceDto = setResourceDTO(csvParser, fileName);
+            dataImports = setDataImport(csvParser, fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return resourceDto;
+        return dataImports;
     }
-
 }

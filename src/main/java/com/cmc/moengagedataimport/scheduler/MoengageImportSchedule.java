@@ -1,14 +1,10 @@
 package com.cmc.moengagedataimport.scheduler;
 
-import com.cmc.moengagedataimport.dto.ResourceDto;
 import com.cmc.moengagedataimport.entities.DataImport;
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.cmc.moengagedataimport.enums.QueueStatusEnum;
 import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 @Component
@@ -33,8 +26,8 @@ public class MoengageImportSchedule {
     @Autowired
     private BulkImportService bulkImportService;
 
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void dailyMoengageImport () throws JsonProcessingException {
+    @Scheduled(cron = "0 0/5 * * * *")
+    public void dailyMoengageImport() throws JsonProcessingException {
         List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIsOrStatusIs(QueueStatusEnum.Waiting, QueueStatusEnum.Failed);
         HttpStatus httpStatus = bulkImportService.bulkImport(dataImports);
         QueueStatusEnum queueStatus;

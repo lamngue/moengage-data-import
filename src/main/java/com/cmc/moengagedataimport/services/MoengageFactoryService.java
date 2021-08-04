@@ -1,16 +1,13 @@
 package com.cmc.moengagedataimport.services;
 
-import com.cmc.moengagedataimport.dto.ResourceDto;
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
+import com.cmc.moengagedataimport.entities.DataImport;
 import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MoengageFactoryService {
@@ -27,20 +24,20 @@ public class MoengageFactoryService {
     @Autowired
     private RedshiftClusterImportService redshiftClusterImportService;
 
-    public Map<String, List<JSONObject>> GetTypeInput(MultipartFile file) throws JsonProcessingException {
+    public List<DataImport> GetTypeInput(MultipartFile file) throws JsonProcessingException {
       if(file == null) {
-         ResourceDto resourceDto = redshiftClusterImportService.getResources();
-         return resourceDto.getDataImport();
+          List<DataImport> dataImports = redshiftClusterImportService.getResources();
+         return dataImports;
       }
       else {
         String fileType = file.getContentType();
         if(fileType.equals("text/csv")){
-           return csvFileImportService.getResources(file).getDataImport();
+           return csvFileImportService.getResources(file);
         }
         else if (fileType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") || fileType.equals("application/vnd.ms-excel")) {
-            return excelFileImportService.getResources(file).getDataImport();
+            return excelFileImportService.getResources(file);
         }
       }
-      return  null;
+      return null;
    }
 }

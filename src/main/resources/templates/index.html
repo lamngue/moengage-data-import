@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Welcome</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+</head>
+
+<body>
+    <h1>Welcome to Moengage data import</h1>
+    <p>
+        The data imported will be added to Moengage users segments. Upon viewing an user, the fields: name, first_name, last_name, email, age, gender, mobile
+        in the data will be displayed Tracked Standard Attribute section as well as the main user info area (First Name, Last Name, Email and Mobile). All other
+        fields in the dataset will be under Tracked Custom Attribute.
+    </p>
+    <p>
+        Select a file for import. If nothing is selected, then the program will fetch data from Redshift.
+    </p>
+    <h3><b>Import from Excel or CSV</b></h3>
+    <div th:class="importFiles">
+        <form th:action="@{/import-data}" method="post" enctype="multipart/form-data">
+            <input type="file" th:name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            <input th:type="submit" value="Import Data" />
+        </form>
+        <div th:text="${response}"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+</body>
+
+</html>
