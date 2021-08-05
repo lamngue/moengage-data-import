@@ -5,7 +5,9 @@ import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
 import com.cmc.moengagedataimport.services.MoengageFactoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +20,20 @@ import java.util.Map;
 
 @RestController
 public class InputController {
+    public static final String EXCHANGE = "Moengage_exchange";
+    public static final String ROUTING_KEY = "rabbitmq.*";
 
     @Autowired
     private MoengageFactoryService moengageFactoryService;
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @GetMapping("/send")
+    public void sendMessage(@RequestParam(value="message") String message) {
+        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY, message);
+    }
+
 
     @PostMapping("/import-data")
     public ModelAndView importExcel(@RequestParam(value = "file", required = false) MultipartFile file) throws JsonProcessingException {

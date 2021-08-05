@@ -13,22 +13,23 @@ public class MessagingConfig {
 
     public static final String QUEUE = "Moengage_queue";
     public static final String EXCHANGE = "Moengage_exchange";
-    public static final String ROUTING_KEY = "Moengage_routingkey";
+    public static final String ROUTING_KEY = "rabbitmq.*";
 
     @Bean
-    public Queue queue() {
-        return new Queue(QUEUE);
+    Queue queue() {
+        return new Queue(QUEUE, false);
     }
 
     @Bean
-    public TopicExchange exchange() {
+    TopicExchange exchange() {
         return new TopicExchange(EXCHANGE);
     }
 
     @Bean
-    public Binding binding(Queue queue, TopicExchange topicExchange) {
-        return BindingBuilder.bind(queue).to(topicExchange).with(ROUTING_KEY);
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
     }
+
 
     @Bean
     public MessageConverter converter() {
