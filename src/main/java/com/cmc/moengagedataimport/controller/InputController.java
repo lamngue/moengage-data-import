@@ -31,7 +31,7 @@ public class InputController {
 
     @GetMapping("/send")
     public void sendMessage(@RequestParam(value="message") String message) {
-        rabbitTemplate.convertAndSend(EXCHANGE, ROUTING_KEY, message);
+        rabbitTemplate.convertAndSend(EXCHANGE, message);
     }
 
 

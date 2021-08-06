@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: usage_message
   data:
     mongodb:
       uri: mongodb+srv://admin:tBQU0x4KXzx5ZF9m@cluster0.erben.mongodb.net/myFirstDatabase?retryWrites=true&w=majority

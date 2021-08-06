@@ -1,5 +1,7 @@
 package com.cmc.moengagedataimport.rabbitMQ.config;
 
+import com.cmc.moengagedataimport.rabbitMQ.consumer.Receiver;
+import com.cmc.moengagedataimport.rabbitMQ.consumer.Sender;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -7,39 +9,28 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
 public class MessagingConfig {
 
     public static final String QUEUE = "Moengage_queue";
-    public static final String EXCHANGE = "Moengage_exchange";
-    public static final String ROUTING_KEY = "rabbitmq.*";
 
     @Bean
     Queue queue() {
-        return new Queue(QUEUE, false);
+        return new Queue(QUEUE);
     }
 
+    @Profile("receiver")
     @Bean
-    TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE);
+    public Receiver receiver() {
+        return new Receiver();
     }
 
+    @Profile("sender")
     @Bean
-    Binding binding(Queue queue, TopicExchange exchange) {
-        return BindingBuilder.bind(queue).to(exchange).with(ROUTING_KEY);
+    public Sender sender() {
+        return new Sender();
     }
 
-
-    @Bean
-    public MessageConverter converter() {
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
-    public AmqpTemplate template(ConnectionFactory connectionFactory) {
-        final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(converter());
-        return rabbitTemplate;
-    }
 }
