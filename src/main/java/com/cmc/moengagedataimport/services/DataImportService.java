@@ -58,19 +58,17 @@ public class DataImportService {
         if(fileName.toLowerCase().contains("cif")){
             fieldNameList = cifFieldName;
         }
-        else if(fileName.toLowerCase().contains("campaign") || fileName.toLowerCase().contains("sheet 1")){
+        else if(fileName.toLowerCase().contains("loan_portfolio") || fileName.toLowerCase().contains("sheet 1")){
             fieldNameList = loanPortfolioFieldName;
         }
         else {
             return null;
         }
-        log.info(fieldNameList.get(1));
         List<DataImport> dataImports = new ArrayList<>();
         for (JSONObject fileData : fileDataList) {
             DataImport dataImport = new DataImport();
             dataImport.setRecord(fileData.toString());
             dataImport.setId(Long.parseLong(fileData.get(fieldNameList.get(0)).toString()));
-//            dataImport.setEmail(x.());
             dataImport.setName(fileData.getString(fieldNameList.get(1)) + fileData.getString(fieldNameList.get(2)) + fileData.getString(fieldNameList.get(3)) );
             dataImport.setFirstName(fileData.getString(fieldNameList.get(1)));
             dataImport.setLastName(fileData.getString(fieldNameList.get(3)));

@@ -41,7 +41,7 @@ public class ExcelFileImportService {
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
                 dataImports = dataImportService.importFileData(listJsonObject, sheetName);
                 break;
-                }
+            }
           }
           return dataImports;
     }
@@ -63,16 +63,16 @@ public class ExcelFileImportService {
             for (int j = 0; j < cells; j++) {
                 // Numeric cell
                 if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                             dataRow.getCell(j).getNumericCellValue());
                     // Boolean Cell
                 } else if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_BOOLEAN) {
-                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                             dataRow.getCell(j).getBooleanCellValue());
                     // Formula Cell
                 } else if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_FORMULA) {
                     if (dataRow.getCell(j).getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                                 dataRow.getCell(j).getNumericCellValue());
                     }
                     // String Cell
@@ -82,12 +82,12 @@ public class ExcelFileImportService {
                     // Array Object Json
                     if (cellDataValue.contains("[{")) {
                         JSONArray jsonArray = new JSONArray(cellDataValue);
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), jsonArray);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), jsonArray);
                     } else if (cellDataValue.contains("{")) {
                         JSONObject jsonObject = new JSONObject(cellDataValue);
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), jsonObject);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), jsonObject);
                     } else {
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), cellDataValue);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), cellDataValue);
                     }
                 }
             }
