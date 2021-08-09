@@ -49,7 +49,7 @@ public class DataImportService {
             dataImport.setFirstName(x.getCust_first_name());
             dataImport.setLastName(x.getCust_last_name());
             dataImport.setGender(x.getCust_gender());
-            dataImport.setMobile(x.getCust_mob_no().toString());
+            dataImport.setMobile(x.getCust_mob_no() != null ?x.getCust_mob_no().toString() :null);
             dataImport.setDataDate(x.getData_date());
             String age = DateUtils.getAgeFromBirthday("yyyymmdd", x.getCust_birth_date().toString());
             dataImport.setAge(age);

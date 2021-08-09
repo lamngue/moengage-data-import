@@ -22,7 +22,7 @@ public class MoengageFactoryService {
     private RedshiftClusterImportService redshiftClusterImportService;
 
     public List<DataImport> GetTypeInput(MultipartFile file) {
-      if(file.getContentType() == null || file.isEmpty()) {
+      if(file == null) {
           List<DataImport> dataImports = redshiftClusterImportService.getResources();
          return dataImports;
       }
