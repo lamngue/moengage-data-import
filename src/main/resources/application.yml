@@ -1,0 +1,40 @@
+spring:
+  profiles:
+    active: usage_message
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:tBQU0x4KXzx5ZF9m@cluster0.erben.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+      database: Reshift_Moengage
+  datasource:
+    url: jdbc:redshift://redshift-cluster-1.c474pyvxrnp3.ap-southeast-1.redshift.amazonaws.com:5439/dev
+    username: connectiontest
+    password: Password123
+    driver-class-name: com.amazon.redshift.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    show-sql: false
+    hbm2ddl:
+      auto: none
+    properties:
+      hibernate:
+        dialect : com.cmc.moengagedataimport.customSqlDialect.CustomSqlDialect
+        current_session_context_class: thread
+bulk:
+  api:
+    url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=1NZ9MZFA546B7ZLQALH1K1EE
+secret:
+  key: LeQy09vezCNCuKOBIYPXu3uu
+  dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
+app:
+  id: 1NZ9MZFA546B7ZLQALH1K1EE
+server:
+  port: 8000
+file:
+  fieldName:
+    sbf_cif: CUST_ID1,FIRST_NAME,MIDDLE_NAME,SURNAME,GENDER_CD,PH_NBR1,DATA_DATE,DOB
+    loan_portfolio: customer_id_number,cust_first_name,cust_middle_name,cust_last_name,cust_gender,cust_mob_no,data_date,cust_birth_date
+  fileName:
+    sbf_cif: cif
+    loan_portfolio: loan_portfolio
