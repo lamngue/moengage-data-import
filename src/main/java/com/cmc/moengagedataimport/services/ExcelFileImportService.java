@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,12 @@ public class ExcelFileImportService {
     @Autowired
     private DataImportService dataImportService;
 
+    @Value("${file.fileName.loan_portfolio}")
+    private String portfolioFileName;
+
+    @Value("${file.fileName.sbf_cif}")
+    private String cifFileName;
+
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private List<String> getSheetNames(XSSFWorkbook workbook) {
         List<String> sheetNames = new ArrayList<>();
@@ -36,12 +43,12 @@ public class ExcelFileImportService {
     public List<DataImport> setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
         List<DataImport> dataImports = new ArrayList<>();
           for (String sheetName : sheetNames) {
-            if (sheetName.equals("Sheet 1") || sheetName.equals("SBF Campaign Management Moengag")) {
+            if (sheetName.contains(portfolioFileName) || sheetName.contains(cifFileName)) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
                 dataImports = dataImportService.importFileData(listJsonObject, sheetName);
                 break;
-                }
+            }
           }
           return dataImports;
     }
@@ -63,16 +70,16 @@ public class ExcelFileImportService {
             for (int j = 0; j < cells; j++) {
                 // Numeric cell
                 if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_NUMERIC) {
-                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                             dataRow.getCell(j).getNumericCellValue());
                     // Boolean Cell
                 } else if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_BOOLEAN) {
-                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                    objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                             dataRow.getCell(j).getBooleanCellValue());
                     // Formula Cell
                 } else if (dataRow.getCell(j).getCellType() == Cell.CELL_TYPE_FORMULA) {
                     if (dataRow.getCell(j).getCachedFormulaResultType() == Cell.CELL_TYPE_NUMERIC) {
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(),
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(),
                                 dataRow.getCell(j).getNumericCellValue());
                     }
                     // String Cell
@@ -82,12 +89,12 @@ public class ExcelFileImportService {
                     // Array Object Json
                     if (cellDataValue.contains("[{")) {
                         JSONArray jsonArray = new JSONArray(cellDataValue);
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), jsonArray);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), jsonArray);
                     } else if (cellDataValue.contains("{")) {
                         JSONObject jsonObject = new JSONObject(cellDataValue);
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), jsonObject);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), jsonObject);
                     } else {
-                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue(), cellDataValue);
+                        objectJsonUser.put(headerRow.getCell(j).getStringCellValue().toLowerCase(), cellDataValue);
                     }
                 }
             }

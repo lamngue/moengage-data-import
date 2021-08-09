@@ -19,12 +19,9 @@ public class MoengageFactoryService {
     private ExcelFileImportService excelFileImportService;
 
     @Autowired
-    private BulkImportService bulkImportService;
-
-    @Autowired
     private RedshiftClusterImportService redshiftClusterImportService;
 
-    public List<DataImport> GetTypeInput(MultipartFile file) throws JsonProcessingException {
+    public List<DataImport> GetTypeInput(MultipartFile file) {
       if(file == null) {
           List<DataImport> dataImports = redshiftClusterImportService.getResources();
          return dataImports;

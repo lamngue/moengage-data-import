@@ -3,12 +3,10 @@ package com.cmc.moengagedataimport.services.bulkImport;
 import com.cmc.moengagedataimport.entities.DataImport;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,9 +32,6 @@ public class BulkImportService {
 
     @Value("${secret.key}")
     private String password;
-
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
 
     private List<JSONObject> populateBulkAttributes(List<DataImport> dataImports) {
         List<JSONObject> bulkAttributeList = new ArrayList<>();
@@ -76,14 +71,13 @@ public class BulkImportService {
         headers.setBasicAuth(this.userName, this.password);
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
         HttpStatus status = HttpStatus.OK;
-        rabbitTemplate.convertAndSend("Moengage_queue", requestJson);
-//        try {
-//            String response = restTemplate.postForObject(this.url, entity, String.class);
-//            log.info("response" +response);
-//        } catch (HttpClientErrorException e) {
-//            System.out.println(e.getStackTrace());
-//            status = e.getStatusCode();
-//        }
+        try {
+            String response = restTemplate.postForObject(this.url, entity, String.class);
+            log.info("response" +response);
+        } catch (HttpClientErrorException e) {
+            System.out.println(e.getStackTrace());
+            status = e.getStatusCode();
+        }
         return status;
     }
 }

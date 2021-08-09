@@ -42,7 +42,7 @@ public class CsvFileImportService  {
             CSVRecord row = csvRecords.get(i);
             // Cell
             for (int j = 0; j < cells; j++) {
-                objectJsonUser.put(header.get(j), row.get(j));
+                objectJsonUser.put(header.get(j).toLowerCase(), row.get(j));
             }
             csvData.add(objectJsonUser);
         }
