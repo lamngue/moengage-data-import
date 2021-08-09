@@ -29,6 +29,7 @@ public class MoengageImportSchedule {
     @Scheduled(cron = "0 0/1 * * * *")
     public void dailyMoengageImport() throws JsonProcessingException {
         List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIsOrStatusIs(QueueStatusEnum.Waiting, QueueStatusEnum.Failed);
+        if(dataImports.isEmpty()) return ;
         HttpStatus httpStatus = bulkImportService.bulkImport(dataImports);
         QueueStatusEnum queueStatus;
         if(httpStatus.equals(HttpStatus.OK)){

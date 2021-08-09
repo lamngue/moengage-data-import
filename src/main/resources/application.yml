@@ -25,7 +25,7 @@ bulk:
   api:
     url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=1NZ9MZFA546B7ZLQALH1K1EE
 secret:
-  key: LeQy09vezCNCuKOBIYPXu3uu
+  key: 1NZ9MZFA546B7ZLQALH1K1EE
   dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
 app:
   id: 1NZ9MZFA546B7ZLQALH1K1EE
