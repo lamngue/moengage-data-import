@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,12 @@ public class ExcelFileImportService {
     @Autowired
     private DataImportService dataImportService;
 
+    @Value("${file.fileName.loan_portfolio}")
+    private String portfolioFileName;
+
+    @Value("${file.fileName.sbf_cif}")
+    private String cifFileName;
+
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private List<String> getSheetNames(XSSFWorkbook workbook) {
         List<String> sheetNames = new ArrayList<>();
@@ -36,7 +43,7 @@ public class ExcelFileImportService {
     public List<DataImport> setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
         List<DataImport> dataImports = new ArrayList<>();
           for (String sheetName : sheetNames) {
-            if (sheetName.equals("Sheet 1") || sheetName.equals("SBF Campaign Management Moengag")) {
+            if (sheetName.contains(portfolioFileName) || sheetName.contains(cifFileName)) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
                 dataImports = dataImportService.importFileData(listJsonObject, sheetName);

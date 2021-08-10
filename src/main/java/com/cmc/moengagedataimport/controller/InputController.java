@@ -20,8 +20,7 @@ import java.util.Map;
 
 @RestController
 public class InputController {
-    public static final String EXCHANGE = "Moengage_exchange";
-    public static final String ROUTING_KEY = "rabbitmq.*";
+    public static final String QUEUE = "Moengage_queue";
 
     @Autowired
     private MoengageFactoryService moengageFactoryService;
@@ -31,7 +30,7 @@ public class InputController {
 
     @GetMapping("/send")
     public void sendMessage(@RequestParam(value="message") String message) {
-        rabbitTemplate.convertAndSend(EXCHANGE, message);
+        rabbitTemplate.convertAndSend(QUEUE, message);
     }
 
 

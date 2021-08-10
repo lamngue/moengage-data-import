@@ -30,6 +30,14 @@ public class DataImportService {
     @Value("${file.fieldName.sbf_cif}")
     private List<String> cifFieldName;
 
+
+    @Value("${file.fileName.loan_portfolio}")
+    private String portfolioFileName;
+
+    @Value("${file.fileName.sbf_cif}")
+    private String cifFileName;
+
+
     public List<DataImport> importRedshiftData(List<SbfLoanPortfolio> sbfLoanPortfolioList, ImportTypeEnum type){
         Gson gson = new Gson();
         List<DataImport> dataImports = sbfLoanPortfolioList.stream().map(x -> {
@@ -41,7 +49,7 @@ public class DataImportService {
             dataImport.setFirstName(x.getCust_first_name());
             dataImport.setLastName(x.getCust_last_name());
             dataImport.setGender(x.getCust_gender());
-            dataImport.setMobile(x.getCust_mob_no().toString());
+            dataImport.setMobile(x.getCust_mob_no() != null ?x.getCust_mob_no().toString() :null);
             dataImport.setDataDate(x.getData_date());
             String age = DateUtils.getAgeFromBirthday("yyyymmdd", x.getCust_birth_date().toString());
             dataImport.setAge(age);
@@ -55,10 +63,10 @@ public class DataImportService {
 
     public List<DataImport> importFileData(List<JSONObject> fileDataList, String fileName){
         List<String> fieldNameList = new ArrayList<>();
-        if(fileName.toLowerCase().contains("cif")){
+        if(fileName.toLowerCase().contains(cifFileName)){
             fieldNameList = cifFieldName;
         }
-        else if(fileName.toLowerCase().contains("loan_portfolio") || fileName.toLowerCase().contains("sheet 1")){
+        else if(fileName.toLowerCase().contains(portfolioFileName)){
             fieldNameList = loanPortfolioFieldName;
         }
         else {

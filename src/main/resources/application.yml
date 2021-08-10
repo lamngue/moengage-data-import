@@ -3,10 +3,10 @@ spring:
     active: usage_message
   data:
     mongodb:
-      uri: mongodb+srv://admin:tBQU0x4KXzx5ZF9m@cluster0.erben.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-      database: Reshift_Moengage
+      uri: ${env.MONGO_URL}
+      database: ${env.MONGO_DBNAME}
   datasource:
-    url: jdbc:redshift://redshift-cluster-1.c474pyvxrnp3.ap-southeast-1.redshift.amazonaws.com:5439/dev
+    url: ${env.REDSHIFT_CLUSTER_DBURL}
     username: connectiontest
     password: Password123
     driver-class-name: com.amazon.redshift.jdbc.Driver
@@ -23,7 +23,7 @@ spring:
         current_session_context_class: thread
 bulk:
   api:
-    url: https://api-01.moengage.com/v1/transition/1NZ9MZFA546B7ZLQALH1K1EE?app_id=1NZ9MZFA546B7ZLQALH1K1EE
+    url: ${env.BULK_API_URL}
 secret:
   key: LeQy09vezCNCuKOBIYPXu3uu
   dbURL: ${env.REDSHIFT_CLUSTER_DBURL}
