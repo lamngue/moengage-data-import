@@ -43,7 +43,7 @@ public class ExcelFileImportService {
     public List<DataImport> setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
         List<DataImport> dataImports = new ArrayList<>();
           for (String sheetName : sheetNames) {
-            if (sheetName.contains(portfolioFileName) || sheetName.contains(cifFileName)) {
+            if (sheetName.toLowerCase().contains(portfolioFileName) || sheetName.toLowerCase().contains(cifFileName)) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
                 dataImports = dataImportService.importFileData(listJsonObject, sheetName);

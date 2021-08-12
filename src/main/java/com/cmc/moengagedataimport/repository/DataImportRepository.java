@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface DataImportRepository extends  MongoRepository<DataImport, Long>{
     Optional<DataImport> findFirstByTypeIsNotOrderByDataDate(ImportTypeEnum type);
-    List<DataImport> findTop100ByStatusIsOrStatusIs(QueueStatusEnum firstStatus, QueueStatusEnum secondStatus);
+    List<DataImport> findTop100ByStatusIs(QueueStatusEnum firstStatus);
 }
