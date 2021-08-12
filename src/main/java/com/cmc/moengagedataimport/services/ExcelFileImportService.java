@@ -46,8 +46,7 @@ public class ExcelFileImportService {
             if (sheetName.toLowerCase().contains(portfolioFileName) || sheetName.toLowerCase().contains(cifFileName)) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
-                dataImports = dataImportService.importFileData(listJsonObject, sheetName);
-                break;
+                dataImports.addAll(dataImportService.importFileData(listJsonObject, sheetName));
             }
           }
           return dataImports;

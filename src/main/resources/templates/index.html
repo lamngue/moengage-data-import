@@ -20,7 +20,7 @@
     <h3><b>Import from Excel or CSV</b></h3>
     <div th:class="importFiles">
         <form th:action="@{/import-data}" method="post" enctype="multipart/form-data">
-            <input type="file" th:name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+            <input type="file" th:name="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
             <input th:type="submit" value="Import Data" />
         </form>
         <div th:text="${response}"></div>
