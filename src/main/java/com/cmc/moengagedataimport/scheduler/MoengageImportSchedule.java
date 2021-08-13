@@ -1,8 +1,6 @@
 package com.cmc.moengagedataimport.scheduler;
 
 import com.cmc.moengagedataimport.entities.DataImport;
-import com.cmc.moengagedataimport.enums.QueueStatusEnum;
-import com.cmc.moengagedataimport.repository.DataImportRepository;
 import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -20,26 +18,26 @@ import java.util.List;
 @EnableScheduling
 public class MoengageImportSchedule {
     Logger log = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private DataImportRepository dataImportRepository;
-
-    @Autowired
-    private BulkImportService bulkImportService;
-
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void dailyMoengageImport() throws JsonProcessingException {
-        List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIs(QueueStatusEnum.Waiting);
-        if(dataImports.isEmpty()) return ;
-        HttpStatus httpStatus = bulkImportService.bulkImport(dataImports);
-        QueueStatusEnum queueStatus;
-        if(httpStatus.equals(HttpStatus.OK)){
-            queueStatus= QueueStatusEnum.Success;
-        } else {
-            queueStatus = QueueStatusEnum.Failed;
-        }
-        for (DataImport data: dataImports) {
-            data.setStatus(queueStatus);
-        }
-        dataImportRepository.saveAll(dataImports);
-    }
+//    @Autowired
+//    private DataImportRepository dataImportRepository;
+//
+//    @Autowired
+//    private BulkImportService bulkImportService;
+//
+//    @Scheduled(cron = "0 0/1 * * * *")
+//    public void dailyMoengageImport() throws JsonProcessingException {
+//        List<DataImport> dataImports = dataImportRepository.findTop100ByStatusIs(QueueStatusEnum.Waiting);
+//        if(dataImports.isEmpty()) return ;
+//        HttpStatus httpStatus = bulkImportService.bulkImport(dataImports);
+//        QueueStatusEnum queueStatus;
+//        if(httpStatus.equals(HttpStatus.OK)){
+//            queueStatus= QueueStatusEnum.Success;
+//        } else {
+//            queueStatus = QueueStatusEnum.Failed;
+//        }
+//        for (DataImport data: dataImports) {
+//            data.setStatus(queueStatus);
+//        }
+//        dataImportRepository.saveAll(dataImports);
+//    }
 }

@@ -17,10 +17,6 @@ spring:
     show-sql: false
     hbm2ddl:
       auto: none
-    properties:
-      hibernate:
-        dialect : com.cmc.moengagedataimport.customSqlDialect.CustomSqlDialect
-        current_session_context_class: thread
 bulk:
   api:
     url: ${env.BULK_API_URL}

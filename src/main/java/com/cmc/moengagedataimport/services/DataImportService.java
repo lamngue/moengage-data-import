@@ -1,11 +1,9 @@
 package com.cmc.moengagedataimport.services;
 
 import com.cmc.moengagedataimport.entities.DataImport;
-import com.cmc.moengagedataimport.entities.SbfLoanPortfolio;
-import com.cmc.moengagedataimport.enums.ImportTypeEnum;
-import com.cmc.moengagedataimport.repository.DataImportRepository;
+import com.cmc.moengagedataimport.services.bulkImport.BulkImportService;
 import com.cmc.moengagedataimport.utils.DateUtils;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +13,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DataImportService {
     private Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @Autowired
-    private DataImportRepository dataImportRepository;
 
     @Value("${file.fieldName.loan_portfolio}")
     private List<String> loanPortfolioFieldName;
@@ -30,6 +24,8 @@ public class DataImportService {
     @Value("${file.fieldName.sbf_cif}")
     private List<String> cifFieldName;
 
+    @Autowired
+    private BulkImportService bulkImportService;
 
     @Value("${file.fileName.loan_portfolio}")
     private String portfolioFileName;
@@ -37,32 +33,8 @@ public class DataImportService {
     @Value("${file.fileName.sbf_cif}")
     private String cifFileName;
 
-
-    public List<DataImport> importRedshiftData(List<SbfLoanPortfolio> sbfLoanPortfolioList, ImportTypeEnum type){
-        Gson gson = new Gson();
-        List<DataImport> dataImports = sbfLoanPortfolioList.stream().map(x -> {
-            DataImport dataImport = new DataImport();
-            dataImport.setRecord(gson.toJson(x));
-            dataImport.setId(x.getCustomer_id_number());
-            dataImport.setEmail(x.getCust_email_id());
-            dataImport.setName(x.getCust_name());
-            dataImport.setFirstName(x.getCust_first_name());
-            dataImport.setLastName(x.getCust_last_name());
-            dataImport.setGender(x.getCust_gender());
-            dataImport.setMobile(x.getCust_mob_no() != null ?x.getCust_mob_no().toString() :null);
-            dataImport.setDataDate(x.getData_date());
-            String age = DateUtils.getAgeFromBirthday("yyyymmdd", x.getCust_birth_date().toString());
-            dataImport.setAge(age);
-            dataImport.setSendDate(0L);
-            dataImport.setType(type);
-            return dataImport;
-        }).collect(Collectors.toList());
-        dataImportRepository.saveAll(dataImports);
-        return dataImports;
-    }
-
-    public List<DataImport> importFileData(List<JSONObject> fileDataList, String fileName){
-        List<String> fieldNameList = new ArrayList<>();
+    public List<DataImport> importFileData(List<JSONObject> fileDataList, String fileName) {
+        List<String> fieldNameList;
         if(fileName.toLowerCase().contains(cifFileName)){
             fieldNameList = cifFieldName;
         }
@@ -86,10 +58,13 @@ public class DataImportService {
             String age = DateUtils.getAgeFromBirthday("yyyymmdd", fileData.getString(fieldNameList.get(7)));
             dataImport.setAge(age);
             dataImport.setSendDate(0L);
-            dataImport.setType(ImportTypeEnum.FIlE);
             dataImports.add(dataImport);
         }
-        dataImportRepository.saveAll(dataImports);
+        try {
+            bulkImportService.bulkImport(dataImports);
+        } catch(JsonProcessingException e) {
+            log.error("Exception {}" , e);
+        }
         return dataImports;
     }
 }

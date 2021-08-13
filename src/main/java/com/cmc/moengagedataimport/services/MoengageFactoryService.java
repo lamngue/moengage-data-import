@@ -19,23 +19,16 @@ public class MoengageFactoryService {
     @Autowired
     private ExcelFileImportService excelFileImportService;
 
-    @Autowired
-    private RedshiftClusterImportService redshiftClusterImportService;
 
     public List<DataImport> GetTypeInput(MultipartFile file) {
-      if(file == null) {
-          List<DataImport> dataImports = redshiftClusterImportService.getResources();
-         return dataImports;
-      }
-      else {
-        String fileType = StringUtils.getFilenameExtension(file.getOriginalFilename());
-        if(fileType.equals("csv")){
-           return csvFileImportService.getResources(file);
+        if (file != null) {
+            String fileType = StringUtils.getFilenameExtension(file.getOriginalFilename());
+            if (fileType.equals("csv")) {
+                return csvFileImportService.getResources(file);
+            } else if (fileType.equals("xlsx") || fileType.equals("xls")) {
+                return excelFileImportService.getResources(file);
+            }
         }
-        else if (fileType.equals("xlsx") || fileType.equals("xls")) {
-            return excelFileImportService.getResources(file);
-        }
-      }
-      return null;
-   }
+        return null;
+    }
 }
