@@ -24,10 +24,10 @@ public class CsvFileImportService  {
     @Autowired
     private DataImportService dataImportService;
 
-    public List<DataImport> setDataImport(CSVParser csvParser, String fileName) throws IOException {
+    public String setDataImport(CSVParser csvParser, String fileName) throws IOException {
         List<JSONObject> records = readValueToJsonObject(csvParser);
-        List<DataImport> dataImports = dataImportService.importFileData(records, fileName);
-        return dataImports;
+        String response = dataImportService.importFileData(records, fileName);
+        return response;
     }
 
     private List<JSONObject> readValueToJsonObject(CSVParser csvParser) throws IOException {
@@ -49,19 +49,20 @@ public class CsvFileImportService  {
         return csvData;
     }
 
-    public List<DataImport> getResources(Object data) {
+    public String getResources(Object data) {
         MultipartFile csvFile = (MultipartFile) data;
         String fileName = csvFile.getOriginalFilename();
         CSVParser csvParser;
         List<DataImport> dataImports = null;
+        String response = "";
         try {
             BufferedReader fileReader = new BufferedReader(new
                     InputStreamReader(csvFile.getInputStream(), "UTF-8"));
             csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT);
-            dataImports = setDataImport(csvParser, fileName);
+            response = setDataImport(csvParser, fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return dataImports;
+        return response;
     }
 }

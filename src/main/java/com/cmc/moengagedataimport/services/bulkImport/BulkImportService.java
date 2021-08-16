@@ -60,7 +60,7 @@ public class BulkImportService {
         return mainBulkObj;
     }
 
-    public HttpStatus bulkImport(List<DataImport> dataImports) throws JsonProcessingException, HttpClientErrorException {
+    public String bulkImport(List<DataImport> dataImports) throws JsonProcessingException, HttpClientErrorException {
         RestTemplate restTemplate = new RestTemplate();
         ObjectMapper mapper = new ObjectMapper();
         JSONObject mainBulkObject = createMainBulkObject(dataImports);
@@ -69,14 +69,13 @@ public class BulkImportService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBasicAuth(this.userName, this.password);
         HttpEntity<String> entity = new HttpEntity<>(requestJson, headers);
-        HttpStatus status = HttpStatus.OK;
+        String response;
         try {
-            String response = restTemplate.postForObject(this.url, entity, String.class);
+            response = restTemplate.postForObject(this.url, entity, String.class);
             log.info("response" +response);
         } catch (HttpClientErrorException e) {
-            System.out.println(e.getStackTrace());
-            status = e.getStatusCode();
+            response = e.toString();
         }
-        return status;
+        return response;
     }
 }

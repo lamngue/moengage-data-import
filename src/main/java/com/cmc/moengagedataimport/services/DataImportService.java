@@ -33,7 +33,7 @@ public class DataImportService {
     @Value("${file.fileName.sbf_cif}")
     private String cifFileName;
 
-    public List<DataImport> importFileData(List<JSONObject> fileDataList, String fileName) {
+    public String importFileData(List<JSONObject> fileDataList, String fileName) {
         List<String> fieldNameList;
         if(fileName.toLowerCase().contains(cifFileName)){
             fieldNameList = cifFieldName;
@@ -60,11 +60,13 @@ public class DataImportService {
             dataImport.setSendDate(0L);
             dataImports.add(dataImport);
         }
+        String response;
         try {
-            bulkImportService.bulkImport(dataImports);
+            response = bulkImportService.bulkImport(dataImports);
+            return response;
         } catch(JsonProcessingException e) {
             log.error("Exception {}" , e);
         }
-        return dataImports;
+        return null;
     }
 }

@@ -1,18 +1,14 @@
 package com.cmc.moengagedataimport.controller;
 
-import com.cmc.moengagedataimport.entities.DataImport;
 import com.cmc.moengagedataimport.services.MoengageFactoryService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.io.IOException;
 
 @RestController
 public class InputController {
@@ -22,14 +18,8 @@ public class InputController {
 
 
     @PostMapping("/import-data")
-    public ModelAndView importExcel(@RequestParam(value = "file", required = false) MultipartFile file) {
-        List<DataImport> dataImports = moengageFactoryService.GetTypeInput(file);
-        String resp;
-        if (dataImports.size() == 0) {
-            resp = "Unable to import. Please check file content or database connectivity";
-        } else {
-            resp = "Import Successfully";
-        }
+    public ModelAndView importExcel(@RequestParam(value = "file", required = false) MultipartFile file) throws IOException {
+        String resp = moengageFactoryService.GetTypeInput(file);
         ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("response", resp);
         return modelAndView;

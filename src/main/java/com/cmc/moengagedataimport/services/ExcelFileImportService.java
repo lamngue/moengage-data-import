@@ -40,16 +40,15 @@ public class ExcelFileImportService {
         return sheetNames;
     }
 
-    public List<DataImport> setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
-        List<DataImport> dataImports = new ArrayList<>();
+    public String setDataImport(XSSFWorkbook workbook, List<String> sheetNames) {
           for (String sheetName : sheetNames) {
             if (sheetName.toLowerCase().contains(portfolioFileName) || sheetName.toLowerCase().contains(cifFileName)) {
                 XSSFSheet worksheet = workbook.getSheet(sheetName);
                 List<JSONObject> listJsonObject = this.readValueToJsonObject(worksheet);
-                dataImports.addAll(dataImportService.importFileData(listJsonObject, sheetName));
+                return dataImportService.importFileData(listJsonObject, sheetName);
             }
           }
-          return dataImports;
+          return null;
     }
 
     private List<JSONObject> readValueToJsonObject(XSSFSheet worksheet) {
@@ -102,7 +101,7 @@ public class ExcelFileImportService {
         return listJSONObject;
     }
 
-    public List<DataImport> getResources(Object object) {
+    public String getResources(Object object) {
         MultipartFile excelFile = (MultipartFile) object;
         XSSFWorkbook workbook = null;
         try {
@@ -111,7 +110,6 @@ public class ExcelFileImportService {
             e.printStackTrace();
         }
         List<String> sheetNames = getSheetNames(workbook);
-        List<DataImport> dataImports = setDataImport(workbook, sheetNames);
-        return dataImports;
+        return setDataImport(workbook, sheetNames);
     }
 }
