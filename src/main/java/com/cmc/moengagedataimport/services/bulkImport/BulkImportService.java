@@ -39,7 +39,7 @@ public class BulkImportService {
         JSONObject bulkAttribute = new JSONObject();
         customAttribute.put("name", data.getName());
         customAttribute.put("first_name", data.getFirstName());
-        customAttribute.put("lastName", data.getLastName());
+        customAttribute.put("last_name", data.getLastName());
         customAttribute.put("email", data.getEmail());
         customAttribute.put("mobile", data.getMobile());
         customAttribute.put("gender", data.getGender());
