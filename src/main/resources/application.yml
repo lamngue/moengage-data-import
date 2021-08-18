@@ -29,7 +29,7 @@ server:
   port: 8000
 file:
   fieldName:
-        sbf_cif: cust_id1,first_name,middle_name,surname,gender_cd,ph_nbr1,data_date,dob
+    sbf_cif: cust_id1,first_name,middle_name,surname,gender_cd,ph_nbr1,data_date,dob
     loan_portfolio: customer_id_number,cust_first_name,cust_middle_name,cust_last_name,cust_gender,cust_mob_no,data_date,cust_birth_date
   fileName:
     sbf_cif: cif
